@@ -14,7 +14,7 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { defaultInitialNodes, NodeDefinitionId, nodeTypes } from "./nodes";
-import { initialEdges, edgeTypes } from "./edges";
+import { defaultInitialEdges, edgeTypes } from "./edges";
 import { RunButton } from "./components/RunButton";
 import { RunReportPanel } from "./components/RunReportPanel";
 import { Logo } from "./components/Logo";
@@ -28,7 +28,13 @@ import { NewNodeContextMenuContent } from "./components/new-node-context-menu-co
 import { nanoid } from "nanoid";
 import { AppNode } from "@/nodes/types";
 
-function Canvas({ initialNodes }: { initialNodes: AppNode[] }) {
+function Canvas({
+  initialNodes,
+  initialEdges,
+}: {
+  initialNodes: AppNode[];
+  initialEdges: Edge[];
+}) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -67,10 +73,16 @@ function Canvas({ initialNodes }: { initialNodes: AppNode[] }) {
     ]);
   });
 
+  // I'm not the biggest fan of useEffect, but it's a quick way to persist the nodes and edges to local storage
   useEffect(() => {
     // persist nodes to local storage
     localStorage.setItem("nodes", JSON.stringify(nodes));
   }, [nodes]);
+
+  useEffect(() => {
+    // persist edges to local storage
+    localStorage.setItem("edges", JSON.stringify(edges));
+  }, [edges]);
 
   const nodesWithClassNames = useMemo(() => {
     return nodes.map((n) => ({
@@ -113,19 +125,28 @@ function Canvas({ initialNodes }: { initialNodes: AppNode[] }) {
 
 export default function App() {
   const [initialNodes, setInitialNodes] = useState<AppNode[] | null>(null);
+  const [initialEdges, setInitialEdges] = useState<Edge[] | null>(null);
 
   useEffect(() => {
     const nodes = localStorage.getItem("nodes");
+    const edges = localStorage.getItem("edges");
     if (nodes && !initialNodes) {
       setInitialNodes(JSON.parse(nodes));
     } else if (!initialNodes) {
       setInitialNodes(defaultInitialNodes);
     }
-  }, [initialNodes]);
+    if (edges && !initialEdges) {
+      setInitialEdges(JSON.parse(edges));
+    } else if (!initialEdges) {
+      setInitialEdges(defaultInitialEdges);
+    }
+  }, [initialNodes, initialEdges]);
 
   return (
     <ReactFlowProvider>
-      {initialNodes && <Canvas initialNodes={initialNodes} />}
+      {initialNodes && initialEdges && (
+        <Canvas initialNodes={initialNodes} initialEdges={initialEdges} />
+      )}
     </ReactFlowProvider>
   );
 }

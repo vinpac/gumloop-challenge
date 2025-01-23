@@ -17,7 +17,7 @@ const NodeFormTypes = {
 };
 
 export const RootNode = (node: AppNode) => {
-  const { updateNode } = useReactFlow();
+  const { updateNode, setNodes } = useReactFlow();
   const NodeForm = NodeFormTypes[node.type as keyof typeof NodeFormTypes];
   const [label, setLabel] = useState(
     (node.data as { label?: string }).label || node.type
@@ -25,9 +25,22 @@ export const RootNode = (node: AppNode) => {
   const syncLabel = useDebounce((newLabel) => {
     updateNode(node.id, { data: { ...node.data, label: newLabel } });
   }, 200);
+
+  const deleteNode = () => {
+    setNodes((nodes) => nodes.filter((n) => n.id !== node.id));
+  };
+
+  const isRunning = true;
+
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="bg-white data-[state=open]:ring-2 data-[state=open]:ring-stone-950 data-[state=open]:border-stone-950 w-[280px] cursor-default block rounded-lg   border-2 border-stone-300 transition-opacity duration-75 group-[&.dragging_*]/node:!cursor-grabbing">
+      <ContextMenuTrigger
+        className={`bg-white data-[state=open]:ring-2 data-[state=open]:ring-stone-950 data-[state=open]:border-stone-950 w-[280px] cursor-default block rounded-lg border-2 border-stone-300 transition-opacity duration-75 group-[&.dragging_*]/node:!cursor-grabbing ${
+          isRunning
+            ? "animate-border-path p-0.5 border-0 ring-inset ring-4 ring-green-200"
+            : ""
+        }`}
+      >
         {node.type !== "file-input" && (
           <Handle position={Position.Top} type="target" />
         )}
@@ -48,7 +61,9 @@ export const RootNode = (node: AppNode) => {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem asChild>
-          <button className="w-full cursor-pointer">Delete</button>
+          <button className="w-full cursor-pointer" onClick={deleteNode}>
+            Delete
+          </button>
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

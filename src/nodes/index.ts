@@ -48,9 +48,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
     id: "file-input",
     name: "PDF",
     description: "Upload a PDF",
-    input: z.object({
-      label: z.string(),
-    }),
+    input: z.object({}),
   },
   {
     id: "llm",

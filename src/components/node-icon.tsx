@@ -1,10 +1,10 @@
 import { AppNode } from "@/nodes/types";
 import type { IconBaseProps } from "react-icons";
-import { TbBrandOpenai, TbFileTypePdf } from "react-icons/tb";
+import { TbBrandOpenai, TbFileText } from "react-icons/tb";
 
 const nodeIconMap: Record<string, React.ComponentType<IconBaseProps>> = {
   llm: TbBrandOpenai,
-  "file-input": TbFileTypePdf,
+  "file-input": TbFileText,
 };
 
 export const NodeIcon = ({
