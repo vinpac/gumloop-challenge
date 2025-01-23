@@ -8,4 +8,60 @@
   #root {
     @apply h-full m-0;
   }
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+.react-flow__edge .react-flow__edge-interaction {
+  stroke-width: 30px !important;
+}
+
+.react-flow__edge:focus .react-flow__edge-path,
+.react-flow__edge:hover .react-flow__edge-path {
+  transition: all 200ms;
+  @apply !stroke-red-300;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 6px;
+}
+
+.react-flow__edge .react-flow__edge-path,
+.react-flow__connectionline path {
+  stroke-width: 4px;
+  @apply stroke-gray-300;
+}
+
+.react-flow__connectionline path {
+  @apply stroke-green-500;
+}
+
+.react-flow__handle {
+  @apply !bg-gray-300 !border-gray-100 border-solid !border-[5px] !w-5 !h-5 !cursor-pointer;
+}
+
+.react-flow__handle-left {
+  top: 12px !important;
+  left: -12px !important;
+}
+
+.react-flow__handle-right {
+  top: 12px !important;
+  right: -12px !important;
+}
+
+.react-flow__handle:hover,
+.react-flow__handle.connectingfrom,
+.react-flow__handle.connectingto {
+  background-color: #233c3e !important;
+}
+
+.react-flow__edge:hover *[data-close-button] {
+  visibility: visible;
+}
+
+.react-flow__edge:active .react-flow__edge-path,
+.react-flow__edge.selected .react-flow__edge-path {
+  @apply !stroke-red-400;
 }

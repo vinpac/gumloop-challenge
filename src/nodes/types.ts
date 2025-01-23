@@ -1,11 +1,18 @@
 import type { Node, BuiltInNode } from "@xyflow/react";
 
-export type FunctionNode = Node<
+export type FileInputNode = Node<
   {
     label: string;
-    func?: (input: any) => any;
-    functionName: string;
   },
-  "function-node"
+  "file-input"
 >;
-export type AppNode = BuiltInNode | FunctionNode;
+
+export type LLMNode = Node<
+  {
+    prompt: string;
+    model: string;
+  },
+  "llm"
+>;
+
+export type AppNode = BuiltInNode | FileInputNode | LLMNode;
