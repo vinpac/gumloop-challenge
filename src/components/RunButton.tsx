@@ -1,6 +1,9 @@
 import { useNodeExecutionStore } from "@/stores/node-execution-store";
-import { AppNode, FileInputNode } from "@/nodes/types";
+import { AppNode, LLMNode } from "@/nodes/types";
 import { useReactFlow } from "@xyflow/react";
+import { useApiKeyStore } from "@/stores/api-key-store";
+import { streamOpenAIResponse } from "@/lib/openai";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 interface RunButtonProps {
   onRun: () => void;
@@ -17,15 +20,17 @@ type NodeState = {
   receivedCalls: NodeCall[];
 };
 
-async function getNodeInputs(calls: NodeCall[]) {
-  return calls.map((call) => call.output).join("\n");
-}
-
 export function RunButton({ onRun }: RunButtonProps) {
   const { getNodes, getEdges } = useReactFlow();
   const { setNodeState, clearAllStates } = useNodeExecutionStore();
+  const openaiKey = useApiKeyStore((state) => state.openaiKey);
 
   const runFlow = async () => {
+    if (!openaiKey) {
+      alert("Please set your OpenAI API key first");
+      return;
+    }
+
     clearAllStates();
     onRun();
 
@@ -51,29 +56,58 @@ export function RunButton({ onRun }: RunButtonProps) {
 
       setNodeState(nodeId, { isRunning: true, startedAt });
 
+      console.info(`[node:${nodeId}] started`);
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         let output = "";
 
         // Get inputs from received calls if any
         const nodeState = callStack.get(nodeId);
-        const inputs = nodeState
-          ? await getNodeInputs(nodeState.receivedCalls)
-          : "";
+        const inputs = nodeState?.receivedCalls.map((c) => c.output);
 
         // dispatch node workflow
         if (node.type === "file-input") {
           if (!node.data.file) {
             throw new Error("File is required");
           }
+          console.info(`[node:${nodeId}] file input:`, node.data.file);
+          output = JSON.stringify(node.data.file) || "";
+          console.info(`[node:${nodeId}] file output:`, { output });
+        } else if (node.type === "llm") {
+          const llmNode = node as LLMNode;
+          if (!llmNode.data.prompt) {
+            throw new Error("Prompt is required");
+          }
 
-          output =
-            (node.data.file as FileInputNode["data"]["file"])?.content || "";
-        } else if (node.type === "llm" && node.data.prompt) {
-          // Here you would make the actual API call to ChatGPT
-          // For now, we'll simulate it
-          output = `Simulated LLM response for prompt: ${node.data.prompt}\nWith inputs: ${inputs}`;
+          let generated = "";
+
+          const inputMessages: ChatCompletionMessageParam[] =
+            inputs?.map((input) => ({
+              role: "user",
+              content: input as string,
+            })) || [];
+          const messages: ChatCompletionMessageParam[] = [
+            { role: "system", content: llmNode.data.prompt },
+            ...inputMessages,
+          ];
+          console.info(`[node:${nodeId}] llm messages:`, { messages });
+          output = await streamOpenAIResponse({
+            apiKey: openaiKey,
+            model: llmNode.data.model || "gpt-3.5-turbo",
+            messages,
+            onToken: (token) => {
+              generated += token;
+              setNodeState(nodeId, {
+                isRunning: true,
+                output: generated,
+                startedAt,
+              });
+            },
+          });
+          console.info(`[node:${nodeId}] llm output:`, { output });
         }
+
+        // sleep for 50ms to provide a visual delay for the challenge
+        await new Promise((resolve) => setTimeout(resolve, 50));
 
         setNodeState(nodeId, {
           isRunning: false,

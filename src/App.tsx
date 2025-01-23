@@ -27,6 +27,7 @@ import {
 import { NewNodeContextMenuContent } from "./components/new-node-context-menu-content";
 import { nanoid } from "nanoid";
 import { AppNode } from "@/nodes/types";
+import { ApiKeyInput } from "./components/ApiKeyInput";
 
 function Canvas({
   initialNodes,
@@ -109,7 +110,10 @@ function Canvas({
           panOnScroll
         >
           <Background />
-          <Logo />
+          <div className="absolute top-4 left-4 z-50 flex items-center gap-2">
+            <Logo />
+            <ApiKeyInput />
+          </div>
           <RunButton onRun={() => setIsPanelOpen(true)} />
           <RunReportPanel
             edges={edges}

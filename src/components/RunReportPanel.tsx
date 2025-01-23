@@ -1,4 +1,5 @@
 import { NodeIcon } from "@/components/node-icon";
+import { RichText } from "@/components/rich-text";
 import {
   Collapsible,
   CollapsibleContent,
@@ -6,7 +7,7 @@ import {
 } from "@/components/ui/collapsible";
 import { AppNode } from "@/nodes/types";
 import { useNodeExecutionStore } from "@/stores/node-execution-store";
-import { Edge, useReactFlow } from "@xyflow/react";
+import { Edge } from "@xyflow/react";
 import { ChevronDownIcon, LoaderCircle } from "lucide-react";
 import { useMemo } from "react";
 import { MdCheckCircle, MdError } from "react-icons/md";
@@ -53,8 +54,6 @@ export function RunReportPanel({
     [nodes, nodeStates]
   );
 
-  console.log(outputNodesIds);
-
   return (
     <div
       className={`fixed top-20 right-4 h-[90vh] w-96 bg-white border border-gray-200 rounded-lg transform transition-transform duration-300 ease-in-out ${
@@ -88,7 +87,9 @@ export function RunReportPanel({
                     node.type}
                 </h3>
                 {state.error && <MdError className="text-red-500" />}
-                {state.output && <MdCheckCircle className="text-green-500" />}
+                {state.finishedAt && (
+                  <MdCheckCircle className="text-green-500" />
+                )}
                 {state.finishedAt && state.startedAt && (
                   <span className="text-xs text-gray-500">
                     after {state.finishedAt - state.startedAt}ms
@@ -106,9 +107,12 @@ export function RunReportPanel({
                   </div>
                 )}
                 {state.output && (
-                  <div className="p-3 bg-stone-50 rounded-md text-sm font-mono whitespace-pre-wrap">
+                  <RichText
+                    className="rounded-md text-sm whitespace-pre-wrap"
+                    proseClassName="prose prose-sm"
+                  >
                     {state.output}
-                  </div>
+                  </RichText>
                 )}
               </CollapsibleContent>
             </Collapsible>

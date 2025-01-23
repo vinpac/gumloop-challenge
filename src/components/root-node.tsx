@@ -40,7 +40,7 @@ export const RootNode = (node: AppNode) => {
       <ContextMenuTrigger
         className={`bg-white relative data-[state=open]:ring-2 data-[state=open]:ring-stone-950 data-[state=open]:border-stone-950 w-[280px] cursor-default block rounded-lg border-2 border-stone-300 transition-opacity duration-75 group-[&.dragging_*]/node:!cursor-grabbing ${
           isRunning
-            ? "animate-border-path border-0 p-0.5 ring-inset ring-4 ring-green-200"
+            ? "animate-border-path !border-0 !p-0.5 ring-inset ring-4 ring-green-200"
             : executionState?.error
             ? "border-0 p-0.5 ring-inset ring-4 duration-200 transition-all ring-red-500"
             : executionState?.output
