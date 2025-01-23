@@ -4,41 +4,15 @@ import { AppNode } from "./types";
 import { z } from "zod";
 import { RootNode } from "@/components/root-node";
 import { zField } from "@/components/zod-form/helpers";
+import defaultFlow from "@/default-flow.json";
 
-export const defaultInitialNodes: AppNode[] = [
-  {
-    id: "a",
-    type: "file-input",
-    position: { x: 0, y: 0 },
-    data: {
-      label: "Upload a PDF",
-    },
-  },
-  {
-    id: "b",
-    type: "llm",
-    position: { x: 0, y: 72 },
-    data: {
-      prompt: "Write your promp here",
-      model: "gpt-4o",
-    },
-  },
-  {
-    id: "c",
-    type: "llm",
-    position: { x: 0, y: 128 },
-    data: {
-      prompt: "What is the meaning of life?",
-      model: "gpt-4o",
-    },
-  },
-];
+export const defaultInitialNodes = defaultFlow.nodes as AppNode[];
 
 type NodeDefinition = {
   id: AppNode["type"];
   name: string;
   description: string;
-  input: z.ZodObject<any, any, any, any>;
+  input: z.ZodObject<z.ZodRawShape, z.UnknownKeysParam, z.ZodTypeAny, object>;
 };
 
 export type NodeDefinitionId = NodeDefinition["id"];
@@ -46,8 +20,8 @@ export type NodeDefinitionId = NodeDefinition["id"];
 export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     id: "file-input",
-    name: "PDF",
-    description: "Upload a PDF",
+    name: "File Input",
+    description: "Accepts PDFs and Text Files",
     input: z.object({}),
   },
   {

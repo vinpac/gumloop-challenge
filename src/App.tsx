@@ -28,6 +28,7 @@ import { NewNodeContextMenuContent } from "./components/new-node-context-menu-co
 import { nanoid } from "nanoid";
 import { AppNode } from "@/nodes/types";
 import { ApiKeyInput } from "./components/ApiKeyInput";
+import { DownloadFlowButton } from "@/download-flow-button";
 
 function Canvas({
   initialNodes,
@@ -114,7 +115,10 @@ function Canvas({
             <Logo />
             <ApiKeyInput />
           </div>
-          <RunButton onRun={() => setIsPanelOpen(true)} />
+          <div className="absolute text-lg top-4 right-4 flex items-center gap-2 z-50">
+            <DownloadFlowButton />
+            <RunButton onRun={() => setIsPanelOpen(true)} />
+          </div>
           <RunReportPanel
             edges={edges}
             nodes={nodes}

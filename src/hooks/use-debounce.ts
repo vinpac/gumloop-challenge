@@ -11,7 +11,7 @@ export const useDebounce = <T extends unknown[]>(
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      timeoutRef.current = setTimeout(() => fn(...args), delay);
+      timeoutRef.current = window.setTimeout(() => fn(...args), delay);
     },
     [fn, delay]
   );

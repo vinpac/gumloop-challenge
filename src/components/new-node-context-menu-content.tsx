@@ -66,7 +66,9 @@ export const NewNodeContextMenuContent = ({
   );
 };
 
-const describeInput = (input: z.ZodObject<any, any, any, any>) => {
+const describeInput = (
+  input: z.ZodObject<z.ZodRawShape, z.UnknownKeysParam, z.ZodTypeAny, object>
+) => {
   return Object.keys(input.shape).map((key) => {
     return (
       <div key={key}>

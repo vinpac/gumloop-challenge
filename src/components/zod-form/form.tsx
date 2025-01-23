@@ -1,4 +1,4 @@
-import { ZodField } from "@/components/zod-form/field";
+import { ZodFieldComponent } from "@/components/zod-form/field";
 import {
   parseZField,
   zodSchemaToInnerSchema,
@@ -44,7 +44,7 @@ export const ZodForm = React.memo(
                 {zFieldProps.label}
               </label>
             )}
-            <ZodField
+            <ZodFieldComponent
               {...zFieldProps}
               name={name}
               schema={propSchema}

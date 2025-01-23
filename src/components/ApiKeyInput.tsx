@@ -1,6 +1,5 @@
 import { useApiKeyStore } from "@/stores/api-key-store";
 import { Input } from "./ui/input";
-import { KeyRound } from "lucide-react";
 import { TbBrandOpenai } from "react-icons/tb";
 
 export function ApiKeyInput() {

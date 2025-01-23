@@ -42,9 +42,9 @@ export const RootNode = (node: AppNode) => {
           isRunning
             ? "animate-border-path !border-0 !p-0.5 ring-inset ring-4 ring-green-200"
             : executionState?.error
-            ? "border-0 p-0.5 ring-inset ring-4 duration-200 transition-all ring-red-500"
-            : executionState?.output
-            ? "border-0 p-0.5 ring-inset ring-4 duration-200 transition-all ring-green-500"
+            ? "!border-0 p-0.5 ring-inset ring-4 duration-200 transition-all ring-red-500"
+            : executionState?.finishedAt
+            ? "!border-0 p-0.5 ring-inset ring-4 duration-200 transition-all ring-green-500"
             : ""
         }`}
       >

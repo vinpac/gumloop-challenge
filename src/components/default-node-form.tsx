@@ -1,4 +1,4 @@
-import { ZodForm } from "@/components/zod-form/index";
+import { ZodForm } from "@/components/zod-form/form";
 import { useDebounce } from "@/hooks/use-debounce";
 import { NODE_DEFINITIONS } from "@/nodes";
 import { AppNode } from "@/nodes/types";

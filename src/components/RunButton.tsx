@@ -4,6 +4,8 @@ import { useReactFlow } from "@xyflow/react";
 import { useApiKeyStore } from "@/stores/api-key-store";
 import { streamOpenAIResponse } from "@/lib/openai";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import { Button } from "@/components/ui/button";
+import { TbPlayerPlayFilled } from "react-icons/tb";
 
 interface RunButtonProps {
   onRun: () => void;
@@ -156,11 +158,12 @@ export function RunButton({ onRun }: RunButtonProps) {
   };
 
   return (
-    <button
+    <Button
       onClick={runFlow}
-      className="absolute text-lg top-4 right-4 bg-pink-100 hover:bg-pink-200 text-pink-500 font-semibold py-2 px-4 rounded-lg border border-pink-500 transition-colors z-50 flex items-center gap-2"
+      className="bg-pink-100 hover:bg-pink-200 text-pink-500 font-semibold rounded-lg border border-pink-500 transition-colors z-50 flex items-center gap-2"
     >
+      <TbPlayerPlayFilled />
       Run Flow
-    </button>
+    </Button>
   );
 }

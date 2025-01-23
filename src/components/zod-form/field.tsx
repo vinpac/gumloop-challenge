@@ -11,8 +11,9 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { ZodFirstPartySchemaTypes } from "zod";
+import { TextareaAutosizeProps } from "react-textarea-autosize";
 
-export const ZodField = ({
+export const ZodFieldComponent = ({
   name,
   schema,
   minRows,
@@ -23,6 +24,7 @@ export const ZodField = ({
 }: ZField & {
   schema: ZodFirstPartySchemaTypes;
   name: string;
+  value: string;
   onChange: (name: string, value: string) => void;
 }) => {
   const props = {
@@ -37,7 +39,7 @@ export const ZodField = ({
       if (minRows) {
         return (
           <Textarea
-            {...props}
+            {...(props as TextareaAutosizeProps)}
             minRows={minRows}
             placeholder={placeholder}
             onChange={(e) => onChange(name, e.target.value)}
@@ -47,7 +49,7 @@ export const ZodField = ({
 
       return (
         <Input
-          {...props}
+          {...(props as Omit<React.ComponentProps<"input">, "ref">)}
           placeholder={placeholder}
           onChange={(e) => onChange(name, e.target.value)}
         />
@@ -69,7 +71,7 @@ export const ZodField = ({
           }));
 
       return (
-        <Select onValueChange={(value) => onChange(name, value)}>
+        <Select value={value} onValueChange={(value) => onChange(name, value)}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
