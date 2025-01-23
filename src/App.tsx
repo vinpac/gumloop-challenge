@@ -90,6 +90,7 @@ function Canvas({
       className: "group/node",
     }));
   }, [nodes]);
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -111,6 +112,8 @@ function Canvas({
           <Logo />
           <RunButton onRun={() => setIsPanelOpen(true)} />
           <RunReportPanel
+            edges={edges}
+            nodes={nodes}
             isOpen={isPanelOpen}
             onClose={() => setIsPanelOpen(false)}
           />
